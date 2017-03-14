@@ -62,6 +62,12 @@ ListNode* GetNode(ListNode* base, int index) {
     return ptr;
 }
 
+ListNode* GetLastNode(ListNode* base) {
+    if (base == nullptr) return base;
+    for (; base->next != nullptr; base=base->next) {}
+    return base;
+}
+
 ListNode* ListInit(const vector<int>& input) {
     ListNode head(-1);
     ListNode* base = &head;
@@ -88,8 +94,8 @@ bool ListCompare(ListNode* first, ListNode* second) {
 }
 
 //仅针对双向链表节点的swap
-void ListNodeSwap(ListNode* first, ListNode* second) {
-    if (first != nullptr && second != nullptr) {
+void ListNodeSwap(ListNode*& first, ListNode*& second) {
+    if (first != nullptr && second != nullptr && first != second) {
         if (first->prior == second) {
             NodeInsertPrior(second, NodeDelete(first));
         } else if (second->prior == first) {
@@ -103,6 +109,7 @@ void ListNodeSwap(ListNode* first, ListNode* second) {
             NodeInsertNext(second, first);
             NodeInsertNext(pos, second);
         }
+        swap(first, second);
     }
 }
 

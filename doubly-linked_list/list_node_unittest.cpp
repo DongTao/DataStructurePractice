@@ -1,12 +1,9 @@
 #include "list_node.h"
+#include "partition.h"
+#include "quicksort.h"
 #include "gtest/gtest.h"
 
 TEST(ListOperation, ListInit) {
-    //ListNode head(10);
-    //ListNode new_head(9);
-    //ListNode* ptr_node = NodeInsertPrior(&head, &new_head);
-    //PrintList(ptr_node);
-
     ListNode* head = ListInit({10,83,23,16,753,323,3,-8});
     PrintList(head);
     ListNode* answer = ListInit({-8,3,10,16,23,83,323,753});
@@ -47,97 +44,97 @@ TEST(ListOperation, NodeInsert) {
 TEST(ListOperation, NodeSwap) {
     ListNode* head1 = ListInit({10,83,23,16,753,323,3,-8});
     ListNode* answer1 = ListInit({-8,83,23,16,753,323,3,10});
-
     ListNode* new_head1 = GetNode(head1, 7);
     ListNodeSwap(head1, new_head1);
-    EXPECT_TRUE(ListCompare(new_head1, answer1));
-    PrintList(new_head1);
+    EXPECT_TRUE(ListCompare(head1, answer1));
+    PrintList(head1);
     PrintList(answer1);
+
+    ListNode* p1 = nullptr;
+    ListNode* p2 = nullptr;
 
     ListNode* head2 = ListInit({10,83,23,16,753,323,3,-8});
     ListNode* answer2 = ListInit({10,83,323,16,753,23,3,-8});
-    ListNodeSwap(GetNode(head2, 2), GetNode(head2, 5));
+    p1 = GetNode(head2, 2);
+    p2 = GetNode(head2, 5);
+    ListNodeSwap(p1, p2);
     EXPECT_TRUE(ListCompare(head2, answer2));
 
     ListNode* head3 = ListInit({10,83,23,16,753,323,3,-8});
-    ListNode* answer3 = ListInit({23,83,10,16,753,323,3,-8});
-    ListNode* new_head3 = GetNode(head3, 2);
-    ListNodeSwap(head3, new_head3);
-    EXPECT_TRUE(ListCompare(new_head3, answer3));
-    PrintList(new_head3);
+    ListNode* answer3 = ListInit({83,10,23,16,753,323,3,-8});
+    p1 = GetNode(head3, 0);
+    p2 = GetNode(head3, 1);
+    ListNodeSwap(head3, p2);
+    EXPECT_TRUE(ListCompare(head3, answer3));
+    PrintList(head3);
     PrintList(answer3);
 
     ListNode* head4 = ListInit({10,83,23,16,753,323,3,-8});
     ListNode* answer4 = ListInit({10,83,323,16,753,23,3,-8});
-    ListNodeSwap(GetNode(head4, 5), GetNode(head4, 2));
+    p1 = GetNode(head4, 5);
+    p2 = GetNode(head4, 2);
+    ListNodeSwap(p1, p2);
     EXPECT_TRUE(ListCompare(head4, answer4));
 
     ListNode* head5 = ListInit({10,83,23,16,753,323,3,-8});
     ListNode* answer5 = ListInit({10,83,23,16,323,753,3,-8});
-    ListNodeSwap(GetNode(head5, 4), GetNode(head5, 5));
+    p1 = GetNode(head5, 4);
+    p2 = GetNode(head5, 5);
+    ListNodeSwap(p1, p2);
     EXPECT_TRUE(ListCompare(head5, answer5));
 }
 
 TEST(Partition, Empty) {
-    ListNode* list = nullptr
-    EXPECT_TRUE(Partition(vec, 0, vec.size()-1, 0) == -1);
+    ListNode* list = nullptr;
+    ListNode* p1 = GetNode(list, 0);
+    ListNode* p2 = GetLastNode(list);
+    EXPECT_TRUE(Partition(p1, p2, p1) == nullptr);
 }
 
-//Mark
 TEST(Partition, SingleValue) {
-    vector<int> vec = {67};
-    EXPECT_TRUE(Partition(vec, 0, vec.size()-1, 0) == 0);
+    ListNode* list = ListInit({67});
+    ListNode* p1 = GetNode(list, 0);
+    ListNode* p2 = GetLastNode(list);
+    ListNode* pp = Partition(list, p2, p1);
+    EXPECT_TRUE(pp == list) << pp->val;
+    PrintList(list);
 }
 
 TEST(Partition, Normal) {
-    vector<int> vec = {5,7,123,5,2,5,6,23,8,5,23,1,9};
-    //结果应该为5,5,2,5,6,5,1
-    int pivot = Partition(vec, 0, vec.size()-1, 1);
-    EXPECT_TRUE(vec[pivot] == 7);
+    ListNode* list = ListInit({5,7,123,5,2,5,6,23,8,5,23,1,9});
+    ListNode* p1 = GetNode(list, 1);
+    ListNode* p2 = GetLastNode(list);
+    ListNode* pp = Partition(list, p2, p1);
+    //结果应该为
+    EXPECT_TRUE(pp == GetNode(list, 7));
     int i = 0;
-    for (; i < pivot; ++i)
-        EXPECT_TRUE(vec[i] < 7);
+    for (; i < 7; ++i)
+        EXPECT_TRUE(GetNode(list, i)->val < 7);
 
-    EXPECT_TRUE(i == 7);
+    for (;pp != nullptr; pp = pp->next)
+        EXPECT_TRUE(pp->val >= 7);
 
-    for (i = pivot; i < vec.size(); ++i)
-        EXPECT_TRUE(vec[i] >= 7);
+    PrintList(list);
 }
 
-//TEST(ListInsertionSort, Empty) {
-//    ListNode* null_head = NULL;
-//    EXPECT_TRUE(InsertionSort(null_head) == NULL);
-//}
-//
-//TEST(ListInsertionSort, SingleValue) {
-//    ListNode* head = ListInit({10});
-//    ListNode* answer = ListInit({10});
-//    EXPECT_TRUE(ListCompare(InsertionSort(head), answer));
-//}
-//
-//TEST(ListInsertionSort, Normal) {
-//    ListNode* head = ListInit({10,83,23,16,753,323,3,-8});
-//    ListNode* answer = ListInit({-8,3,10,16,23,83,323,753});
-//    ListNode* new_head = InsertionSort(head);
-//    PrintList(new_head);
-//    EXPECT_TRUE(ListCompare(new_head, answer));
-//}
-//
-//TEST(ListMergeSort, Empty) {
-//    ListNode* null_head = NULL;
-//    EXPECT_TRUE(MergeSort(null_head) == NULL);
-//}
-//
-//TEST(ListMergeSort, SingleValue) {
-//    ListNode* head = ListInit({10});
-//    ListNode* answer = ListInit({10});
-//    EXPECT_TRUE(ListCompare(MergeSort(head), answer));
-//}
-//
-//TEST(ListMergeSort, Normal) {
-//    ListNode* head = ListInit({10,83,23,16,753,323,3,-8});
-//    ListNode* answer = ListInit({-8,3,10,16,23,83,323,753});
-//    ListNode* new_head = MergeSort(head);
-//    PrintList(new_head);
-//    EXPECT_TRUE(ListCompare(new_head, answer));
-//}
+TEST(ListQuickSort, Empty) {
+    ListNode* null_head = nullptr;
+    QuickSort(null_head, null_head);
+    EXPECT_TRUE(null_head == NULL);
+}
+
+TEST(ListQuickSort, SingleValue) {
+    ListNode* head = ListInit({10});
+    ListNode* answer = ListInit({10});
+    QuickSort(head, head);
+    EXPECT_TRUE(ListCompare(head, answer));
+}
+
+TEST(ListQuickSort, Normal) {
+    ListNode* head = ListInit({10,83,23,16,753,323,3,-8});
+    ListNode* answer = ListInit({-8,3,10,16,23,83,323,753});
+    ListNode* p2 = GetLastNode(head);
+    QuickSort(head, p2);
+    PrintList(head);
+    EXPECT_TRUE(ListCompare(head, answer));
+}

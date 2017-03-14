@@ -3,7 +3,7 @@ CXX = g++
 
 GTEST_DIR = /home/docker/gtest
 
-CFLAGS := --std=c++11
+CFLAGS := --std=c++11 -g
 INC_PATH := $(GTEST_DIR)
 LIB_PATH := $(GTEST_DIR)
 LIBS := gtest gtest_main pthread
@@ -11,7 +11,7 @@ LIBS := gtest gtest_main pthread
 SRC = $(wildcard *.cpp)
 OBJS = $(patsubst %.cpp,%.o,$(SRC))
 
-%.o : %.cpp
+%.o : %.cpp *.h
 	$(CXX) -c $< $(addprefix -I,$(INC_PATH)) $(CFLAGS) -o $@
 
 all : $(OBJS)
