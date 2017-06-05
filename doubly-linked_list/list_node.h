@@ -94,22 +94,16 @@ bool ListCompare(ListNode* first, ListNode* second) {
 }
 
 //仅针对双向链表节点的swap
-void ListNodeSwap(ListNode*& first, ListNode*& second) {
-    if (first != nullptr && second != nullptr && first != second) {
-        if (first->prior == second) {
-            NodeInsertPrior(second, NodeDelete(first));
-        } else if (second->prior == first) {
-            NodeInsertPrior(first, NodeDelete(second));
-        } else if (first->next != nullptr) {
-            ListNode* pos = first->next;
-            NodeInsertPrior(second, first);
-            NodeInsertPrior(pos, second);
-        } else if (first->prior != nullptr) {
-            ListNode* pos = first->prior;
-            NodeInsertNext(second, first);
-            NodeInsertNext(pos, second);
-        }
+void ListNodeSwap(ListNode& first, ListNode& second) {
+    if (&first != &second) {
         swap(first, second);
+        ListNode* carry = first.prior;
+        first.prior = second.prior;
+        second.prior = carry;
+
+        carry = first.next;
+        first.next = second.next;
+        second.next = carry;
     }
 }
 

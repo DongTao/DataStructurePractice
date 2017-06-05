@@ -7,15 +7,19 @@
 
 using namespace std;
 
-void QuickSort(ListNode*& begin, ListNode*& end) {
+void QuickSort(ListNode* begin, ListNode* end) {
     if (begin == nullptr || end == nullptr || begin == end) return;
 
-    ListNode* pivot = Partition(begin, end, begin);
     PrintList(begin);
+    ListNode* pivot = Partition(begin, end, begin);
     if (pivot != nullptr) {
         cout << "pivot: " << pivot->val << endl;
-        QuickSort(begin, pivot->prior);
-        QuickSort(pivot->next, end);
+        if (pivot != begin) {
+            QuickSort(begin, pivot->prior);
+        }
+        if (pivot != end) {
+            QuickSort(pivot->next, end);
+        }
     }
 }
 

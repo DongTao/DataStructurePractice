@@ -45,7 +45,7 @@ TEST(ListOperation, NodeSwap) {
     ListNode* head1 = ListInit({10,83,23,16,753,323,3,-8});
     ListNode* answer1 = ListInit({-8,83,23,16,753,323,3,10});
     ListNode* new_head1 = GetNode(head1, 7);
-    ListNodeSwap(head1, new_head1);
+    ListNodeSwap(*head1, *new_head1);
     EXPECT_TRUE(ListCompare(head1, answer1));
     PrintList(head1);
     PrintList(answer1);
@@ -57,14 +57,14 @@ TEST(ListOperation, NodeSwap) {
     ListNode* answer2 = ListInit({10,83,323,16,753,23,3,-8});
     p1 = GetNode(head2, 2);
     p2 = GetNode(head2, 5);
-    ListNodeSwap(p1, p2);
+    ListNodeSwap(*p1, *p2);
     EXPECT_TRUE(ListCompare(head2, answer2));
 
     ListNode* head3 = ListInit({10,83,23,16,753,323,3,-8});
     ListNode* answer3 = ListInit({83,10,23,16,753,323,3,-8});
     p1 = GetNode(head3, 0);
     p2 = GetNode(head3, 1);
-    ListNodeSwap(head3, p2);
+    ListNodeSwap(*head3, *p2);
     EXPECT_TRUE(ListCompare(head3, answer3));
     PrintList(head3);
     PrintList(answer3);
@@ -73,14 +73,14 @@ TEST(ListOperation, NodeSwap) {
     ListNode* answer4 = ListInit({10,83,323,16,753,23,3,-8});
     p1 = GetNode(head4, 5);
     p2 = GetNode(head4, 2);
-    ListNodeSwap(p1, p2);
+    ListNodeSwap(*p1, *p2);
     EXPECT_TRUE(ListCompare(head4, answer4));
 
     ListNode* head5 = ListInit({10,83,23,16,753,323,3,-8});
     ListNode* answer5 = ListInit({10,83,23,16,323,753,3,-8});
     p1 = GetNode(head5, 4);
     p2 = GetNode(head5, 5);
-    ListNodeSwap(p1, p2);
+    ListNodeSwap(*p1, *p2);
     EXPECT_TRUE(ListCompare(head5, answer5));
 }
 
@@ -100,7 +100,7 @@ TEST(Partition, SingleValue) {
     PrintList(list);
 }
 
-TEST(Partition, Normal) {
+TEST(Partition, Normal1) {
     ListNode* list = ListInit({5,7,123,5,2,5,6,23,8,5,23,1,9});
     ListNode* p1 = GetNode(list, 1);
     ListNode* p2 = GetLastNode(list);
@@ -113,6 +113,20 @@ TEST(Partition, Normal) {
 
     for (;pp != nullptr; pp = pp->next)
         EXPECT_TRUE(pp->val >= 7);
+
+    PrintList(list);
+}
+
+TEST(Partition, Normal2) {
+    ListNode* list = ListInit({753,323,83,23});
+    ListNode* p2 = GetLastNode(list);
+    ListNode* pp = Partition(list, p2, list);
+    EXPECT_TRUE(pp == GetNode(list, 3));
+    for (int i = 0; i < 3; ++i)
+        EXPECT_TRUE(GetNode(list, i)->val < 753);
+
+    for (;pp != nullptr; pp = pp->next)
+        EXPECT_TRUE(pp->val >= 753);
 
     PrintList(list);
 }
